@@ -16,13 +16,11 @@ pipeline {
             steps  {
                 echo "Starting"
             }
+        }     
+        stage ('Sonar Stage') {
+            steps  {
+                echo "Sonar Analysis"
+            }
         }        
-    }
-
-    post {
-        always {
-        }
-    }
-
-    
+    }    
 }
