@@ -20,6 +20,12 @@ pipeline {
         stage ('Sonar Stage') {
             steps  {
                 echo "Sonar Analysis"
+                withSonarQubeEnv ('SonarCloud') {
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar \
+                        -Dsonar.organization="mmjesu6" \
+                        -Dsonar.projectKey="retoCloudGitOps" \
+                        -Dsonar.branch.name="$BRANCH_NAME"'
+                }
             }
         }        
     }    
