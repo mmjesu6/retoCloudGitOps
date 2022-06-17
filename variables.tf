@@ -1,3 +1,9 @@
+variable "key_access" {
+  type = string
+}
+variable "key_secret"{
+  type = string
+}
 variable "image_id" {
   type = string
 }

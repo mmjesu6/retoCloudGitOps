@@ -2,8 +2,8 @@
   
 provider "aws" {
   region  = "eu-west-1"
-  access_key = 
-  secret_key =
+  access_key = var.key_access
+  secret_key = var.key_secret
   //profile = "default"
 }
 resource "aws_subnet" "propia"{

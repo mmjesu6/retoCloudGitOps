@@ -31,7 +31,24 @@ pipeline {
                     }
                 }
             }
-        }     
+        }   
+        stage ('Terraform Plan') {
+            environment{
+                ACCOUNT_ID= "774430347359"
+            }
+
+            steps  {
+                script{    
+                    echo "Doing Tf plan"
+                              
+                    withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKey-ID', passwordVariable: 'accessKey-Secret')]){
+                        sh "terraform plan -var key_access=${accessKey-ID}  -var key_secret=${accessKey-Secret}"
+                        
+                    }
+                }
+            }
+        }   
+            
         stage ('Sonar Stage') {
             steps  {
                 echo "Sonar Analysis"
