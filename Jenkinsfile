@@ -12,18 +12,7 @@ pipeline {
     }
 
     stages {
-        stage ("Preparing AWS") {
-            steps  {
-                script{    
-                    echo "Download aws"
-                    sh '''
-                        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-                        unzip awscliv2.zip
-                        sudo ./aws/install
-                    '''                    
-                }
-            }
-        }  
+        
         stage ('Terraform Init') {
             environment{
                 ACCOUNT_ID= "774430347359"
@@ -32,10 +21,9 @@ pipeline {
             steps  {
                 script{    
                     echo "Doing Tf Init"
-                
-                    sh('aws configure set region eu-west-1')
+                    sh "terraform init "          
                     withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKey-ID', passwordVariable: 'accessKey-Secret')]){
-                        assume_result = sh(script: "export AWS_ACCESS_KEY_ID=${accessKey-ID} && export AWS_SECRET_ACCESS_KEY=${accessKey-Secret} && aws sts assume-role --role-arn arn:aws:iam::${ACCOUNT_ID}:role/Jenkins --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text", returnStdout: true)
+                        assume_result = sh(script: "export AWS_ACCESS_KEY_ID=${accessKey-ID} && export AWS_SECRET_ACCESS_KEY=${accessKey-Secret}", returnStdout: true)
                         assume_values = assume_result.split("\t")
                         env.AWS_ACCESS_KEY_ID=assume_values[0]
                         env.AWS_SECRET_ACCESS_KEY=assume_values[1]
