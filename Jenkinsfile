@@ -60,7 +60,7 @@ pipeline {
         } 
         stage ('Terraform destroy') {
             when {
-                not {
+                any {
                     expression { BRANCH_NAME.equals('main') }
                 }
             }
