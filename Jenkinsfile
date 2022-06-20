@@ -58,7 +58,7 @@ pipeline {
                 }
             }
         } 
-        stage ('Terraform Apply') {
+        stage ('Terraform destroy') {
             when {
                 not {
                     expression { BRANCH_NAME.equals('main') }
