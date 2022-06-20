@@ -36,7 +36,7 @@ pipeline {
                 script{    
                     echo "Doing Tf plan"                              
                     withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
-                        sh "terraform plan -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret}"
+                        sh "terraform plan -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret} -out mmjesu6.tfplan"
                         
                     }
                 }
@@ -52,7 +52,7 @@ pipeline {
                 script{    
                     echo "Doing Tf apply"                              
                     withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
-                        sh "terraform apply -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret}"
+                        sh "terraform apply -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret} -input=false -auto-approve mmjesu6.tfplan -no-color"
                         
                     }
                 }
