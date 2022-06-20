@@ -28,7 +28,7 @@ pipeline {
         stage ('Terraform Plan') {
             when {
                 not {
-                    expression { BRANCH_NAME.equals('master') }
+                    expression { BRANCH_NAME.equals('main') }
                 }
             }
 
@@ -45,7 +45,7 @@ pipeline {
         stage ('Terraform Apply') {
             when {
                 anyOf {
-                    expression { BRANCH_NAME.equals('master') }
+                    expression { BRANCH_NAME.equals('main') }
                 }
             }
             steps  {
