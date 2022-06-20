@@ -26,8 +26,10 @@ pipeline {
             }
         }   
         stage ('Terraform Plan') {
-            environment{
-                ACCOUNT_ID= "774430347359"
+            when {
+                not {
+                    expression { BRANCH_NAME.equals('master') }
+                }
             }
 
             steps  {
@@ -40,6 +42,23 @@ pipeline {
                 }
             }
         }   
+        stage ('Terraform Apply') {
+            when {
+                anyOf {
+                    expression { BRANCH_NAME.equals('master') }
+                }
+            }
+            steps  {
+                script{    
+                    echo "Doing Tf apply"                              
+                    withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
+                        sh "terraform apply -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret}"
+                        
+                    }
+                }
+            }
+        } 
+            
             
         stage ('Sonar Stage') {
             steps  {
