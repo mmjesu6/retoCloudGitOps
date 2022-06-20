@@ -6,14 +6,6 @@ provider "aws" {
   secret_key = var.key_secret
   //profile = "default"
 }
-resource "aws_subnet" "propia"{
-        vpc_id= var.vpc_id
-        cidr_block= var.cidr
-  tags = {
-        Name = "mmjesu6@mapfre.com"
-        Owner = "mmjesu6@mapfre.com"
-  }
-}
 resource "aws_s3_bucket" "b" {
   bucket = "mapfre-gitops-mmjesu6"
 
