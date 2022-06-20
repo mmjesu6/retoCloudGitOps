@@ -68,7 +68,7 @@ pipeline {
                 script{    
                     echo "Doing Tf apply"                              
                     withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
-                        sh "terraform destroy -input=false -auto-approve"
+                        sh "terraform destroy -input=false -auto-approve -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret}"
                         
                     }
                 }
