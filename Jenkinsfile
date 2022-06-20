@@ -58,7 +58,23 @@ pipeline {
                 }
             }
         } 
-            
+        stage ('Terraform Apply') {
+            when {
+                not {
+                    expression { BRANCH_NAME.equals('main') }
+                }
+            }
+            steps  {
+                script{    
+                    echo "Doing Tf apply"                              
+                    withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
+                        sh "terraform destroy -input=false -auto-approve mmjesu6.tfplan -no-color"
+                        
+                    }
+                }
+            }
+        } 
+               
             
         stage ('Sonar Stage') {
             steps  {
