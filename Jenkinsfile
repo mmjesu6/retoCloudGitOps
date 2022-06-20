@@ -21,14 +21,7 @@ pipeline {
             steps  {
                 script{    
                     echo "Doing Tf Init"
-                    sh "terraform init "          
-                    withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKey-ID', passwordVariable: 'accessKey-Secret')]){
-                        assume_result = sh(script: "export AWS_ACCESS_KEY_ID=${accessKey-ID} && export AWS_SECRET_ACCESS_KEY=${accessKey-Secret}", returnStdout: true)
-                        assume_values = assume_result.split("\t")
-                        env.AWS_ACCESS_KEY_ID=assume_values[0]
-                        env.AWS_SECRET_ACCESS_KEY=assume_values[1]
-                        env.AWS_SESSION_TOKEN=assume_values[2].replaceAll("[\n]","")
-                    }
+                    sh "terraform init "       
                 }
             }
         }   
@@ -39,8 +32,7 @@ pipeline {
 
             steps  {
                 script{    
-                    echo "Doing Tf plan"
-                              
+                    echo "Doing Tf plan"                              
                     withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKey-ID', passwordVariable: 'accessKey-Secret')]){
                         sh "terraform plan -var key_access=${accessKey-ID}  -var key_secret=${accessKey-Secret}"
                         
