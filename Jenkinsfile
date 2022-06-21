@@ -107,7 +107,10 @@ pipeline {
                 script{
                     
                     tag = sh(script: "./entrypointNexVersion.sh", returnStdout: true) 
-                    sh "git tag -a ${tag}"
+                    sh '''
+                    git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f
+                    git tag -a //$tag
+                    ''''
 
                 }
             }
