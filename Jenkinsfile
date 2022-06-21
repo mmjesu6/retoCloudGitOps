@@ -58,22 +58,53 @@ pipeline {
                 }
             }
         } 
-        stage ('Terraform destroy') {
+        stage ('Checking Ansible '){
+            steps{
+                script{
+                    echo "Checking Ansible script"
+                    dir("ansible"){
+                        withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
+                            sh "ansible-playbook  retoCloudGitOps.yml --extra-vars='access_key_id=${accessKeyID}' --extra-vars='access_key_secret=${accessKeySecret}' --extra-vars='aws_region=eu-west-1' --check"                        
+                        }
+                    }
+                }
+            }
+        }
+        stage ('Ansible html provisioning'){
             when {
                 anyOf {
                     expression { BRANCH_NAME.equals('main') }
                 }
             }
-            steps  {
-                script{    
-                    echo "Doing Tf apply"                              
-                    withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
-                        sh "terraform destroy -input=false -auto-approve -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret}"
-                        
+            steps{
+                script{
+                    echo "Provisioning with Ansible"
+                    dir("ansible"){
+                        withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
+                            sh "ansible-playbook  retoCloudGitOps.yml --extra-vars='access_key_id=${accessKeyID}' --extra-vars='access_key_secret=${accessKeySecret}' --extra-vars='aws_region=eu-west-1'"
+                            
+                        }
                     }
                 }
             }
-        } 
+        }
+
+        // stage ('Terraform destroy') {
+        //     when {
+        //         anyOf {
+        //             expression { BRANCH_NAME.equals('main') }
+        //         }
+        //     }
+        //     steps  {
+        //         script{    
+        //             echo "Doing Tf apply"                              
+        //             withCredentials([usernamePassword(credentialsId: 'AWS-accessKey-MMJESU6retoCloudGitOps', usernameVariable: 'accessKeyID', passwordVariable: 'accessKeySecret')]){
+        //                 sh "terraform destroy -input=false -auto-approve -var key_access=${accessKeyID}  -var key_secret=${accessKeySecret}"
+                        
+        //             }
+        //         }
+        //     }
+        // } 
                
             
         stage ('Sonar Stage') {

@@ -1,0 +1,45 @@
+- hosts: localhost
+  vars_files:
+  - vars.yml
+  tasks:
+  - name: IAM Managed Policy change self password keys
+    community.aws.iam_managed_policy:
+      profile: "{{ profile }}"
+      policy_name: "changeSelfPwKeys"
+      policy: "{{ awspolicy_changeselfpwkeys }}"
+      state: "{{ state }}"
+    register: pol_selfpwkeys
+  - name: IAM Managed Policy alumni perms
+    community.aws.iam_managed_policy:
+      profile: "{{ profile }}"
+      policy_name: "alumni"
+      policy: "{{ awspolicy_alumni_perms }}"
+      state: "{{ state }}"
+    register: pol_alumni
+
+  - name: Create users
+    community.aws.iam_user:
+      profile: "{{ profile }}"
+      name: "{{ item }}"
+      state: "{{ state }}"
+      update_password: "{{ repass | default('on_create') }}"
+      password: "{{ lookup('password', 'pws/'+item) }}"
+      tags: 
+        subnet: "{{ idx }}"
+    loop: "{{ users }}"
+    loop_control:
+      index_var: idx
+    register: users
+  - name: Create a group
+    community.aws.iam_group:
+      profile: "{{ profile }}"
+      name: Alumni
+      managed_policies:
+      - "{{ pol_selfpwkeys.policy.arn }}" 
+      - "{{ pol_alumni.policy.arn }}" 
+      state: present
+      purge_users: true
+      users: "{{ users.results | json_query('[*].iam_user.user.user_name') }}"
+    register: group
+
+
