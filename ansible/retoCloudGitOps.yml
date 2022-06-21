@@ -1,6 +1,6 @@
 - hosts: localhost
   tasks:
-  - name: push object on S3
+  - name: push index object on S3
     amazon.aws.aws_s3:
       aws_access_key: "{{ access_key_id }}"
       aws_secret_key: "{{ access_key_secret }}"
@@ -9,4 +9,25 @@
       permission: ['aws-exec-read', 'public-read']
       mode: put
       object: index.html
-      src: ../index.html
+      src: ../web/index.html
+
+  - name: push error object on S3
+    amazon.aws.aws_s3:
+      aws_access_key: "{{ access_key_id }}"
+      aws_secret_key: "{{ access_key_secret }}"
+      region: "{{ aws_region }}"
+      bucket: mapfre-gitops-mmjesu6
+      permission: ['aws-exec-read', 'public-read']
+      mode: put
+      object: error.html
+      src: ../web/error.html     
+  - name: push image object on S3
+    amazon.aws.aws_s3:
+      aws_access_key: "{{ access_key_id }}"
+      aws_secret_key: "{{ access_key_secret }}"
+      region: "{{ aws_region }}"
+      bucket: mapfre-gitops-mmjesu6
+      permission: ['aws-exec-read', 'public-read']
+      mode: put
+      object: work-done.jpg
+      src: ../web/work-done.jpg
