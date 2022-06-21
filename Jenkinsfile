@@ -78,6 +78,7 @@ pipeline {
                 }
             }
         }
+        
         stage ('Ansible html provisioning'){
             when {
                 anyOf {
@@ -95,6 +96,23 @@ pipeline {
                 }
             }
         }
+        stage ('git Tag Version'){
+            when {
+                anyOf {
+                    expression { BRANCH_NAME.equals('main') }
+                }
+                
+            }
+            steps{
+                script{
+                    
+                    tag = sh(script: "./entrypointNexVersion.sh", returnStdout: true) 
+                    sh "git tag -a ${tag}"
+
+                }
+            }
+        }
+        
 
         stage ('Sonar Stage') {
             steps  {
