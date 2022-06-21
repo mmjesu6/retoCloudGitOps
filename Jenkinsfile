@@ -95,43 +95,6 @@ pipeline {
                     }
                 }
             }
-        }
-        stage ('git Tag Version'){
-            when {
-                anyOf {
-                    expression { BRANCH_NAME.equals('main') }
-                }
-                
-            }
-            steps{
-                script{
-                    
-                    tag = read
-                    withCredentials([usernamePassword(credentialsId: 'gitHub-retoMMJESU6', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
-                        versionFile=readYaml(file: 'version.yml')
-                        tag= versionFile.version
-
-                        sh '''
-                        git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f
-                        git tag -a //$tag
-                        '''
-                    }
-
-                }
-            }
-        }
-        
-
-        stage ('Sonar Stage') {
-            steps  {
-                echo "Sonar Analysis"
-                // withSonarQubeEnv ('SonarCloud') {
-                //     sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar \
-                //         -Dsonar.organization="mmjesu6" \
-                //         -Dsonar.projectKey="retoCloudGitOps" \
-                //         -Dsonar.branch.name="$BRANCH_NAME"'
-                // }
-            }
-        }        
+        }       
     }    
 }
