@@ -6,6 +6,7 @@
       aws_secret_key: "{{ access_key_secret }}"
       region: "{{ aws_region }}"
       bucket: mapfre-gitops-mmjesu6
+      permission: ['aws-exec-read', 'public-read']
       mode: put
       object: index.html
       src: ../index.html
