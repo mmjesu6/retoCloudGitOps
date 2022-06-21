@@ -106,9 +106,11 @@ pipeline {
             steps{
                 script{
                     
-                    tag = sh(script: "./entrypointNexVersion.sh", returnStdout: true) ç
+                    tag = read
                     withCredentials([usernamePassword(credentialsId: 'gitHub-retoMMJESU6', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
-                        
+                        versionFile=readYaml(file: 'version.yml')
+                        tag= versionFile.version
+
                         sh '''
                         git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f
                         git tag -a //$tag
