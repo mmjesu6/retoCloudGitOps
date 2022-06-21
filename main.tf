@@ -6,14 +6,6 @@ provider "aws" {
   secret_key = var.key_secret
   //profile = "default"
 }
-resource "aws_subnet" "propia"{
-        vpc_id= var.vpc_id
-        cidr_block= var.cidr
-  tags = {
-        Name = "mmjesu6@mapfre.com"
-        Owner = "mmjesu6@mapfre.com"
-  }
-}
 resource "aws_s3_bucket" "b" {
   bucket = "mapfre-gitops-mmjesu6"
 
@@ -25,7 +17,7 @@ resource "aws_s3_bucket" "b" {
 
 resource "aws_s3_bucket_acl" "example" {
   bucket = aws_s3_bucket.b.id
-  acl    = "private"
+  acl    = "public-read"
 }
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.b.bucket
@@ -37,7 +29,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
   error_document {
     key = "error.html"
   }
-
+  /*
   routing_rule {
     condition {
       key_prefix_equals = "docs/"
@@ -46,6 +38,17 @@ resource "aws_s3_bucket_website_configuration" "example" {
       replace_key_prefix_with = "documents/"
     }
   }
+  */
 }
+/*
+resource "aws_s3_object" "object" {
 
-                   
+  bucket = aws_s3_bucket.b.id
+  key    = "index.html"
+  acl    = "public-read"  # or can be "public-read"
+  source = "index.html"
+  etag = filemd5("index.html")
+  content_type = "text/html"
+
+}
+*/ 
