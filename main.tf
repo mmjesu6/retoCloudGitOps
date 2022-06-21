@@ -40,7 +40,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
   }
   */
 }
-resource "aws_s3_bucket_object" "object" {
+resource "aws_s3_object" "object" {
 
   bucket = aws_s3_bucket.b.id
   key    = "index.html"
