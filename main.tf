@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "b" {
 
 resource "aws_s3_bucket_acl" "example" {
   bucket = aws_s3_bucket.b.id
-  acl    = "private"
+  acl    = "public-read"
 }
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.b.bucket
