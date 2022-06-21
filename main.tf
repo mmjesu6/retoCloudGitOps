@@ -29,7 +29,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
   error_document {
     key = "error.html"
   }
-
+  /*
   routing_rule {
     condition {
       key_prefix_equals = "docs/"
@@ -38,7 +38,9 @@ resource "aws_s3_bucket_website_configuration" "example" {
       replace_key_prefix_with = "documents/"
     }
   }
+  */
 }
+/*
 resource "aws_s3_bucket_object" "object" {
 
   bucket = aws_s3_bucket.b.id
@@ -48,4 +50,4 @@ resource "aws_s3_bucket_object" "object" {
   etag = filemd5("index.html")
 
 }
-                   
+*/                 
