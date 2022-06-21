@@ -40,6 +40,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
   }
   */
 }
+/*
 resource "aws_s3_object" "object" {
 
   bucket = aws_s3_bucket.b.id
@@ -50,4 +51,4 @@ resource "aws_s3_object" "object" {
   content_type = "text/html"
 
 }
-      
+*/ 
