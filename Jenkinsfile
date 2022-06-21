@@ -106,11 +106,14 @@ pipeline {
             steps{
                 script{
                     
-                    tag = sh(script: "./entrypointNexVersion.sh", returnStdout: true) 
-                    sh '''
-                    git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f
-                    git tag -a //$tag
-                    ''''
+                    tag = sh(script: "./entrypointNexVersion.sh", returnStdout: true) ç
+                    withCredentials([usernamePassword(credentialsId: 'gitHub-retoMMJESU6', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
+                        
+                        sh '''
+                        git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f
+                        git tag -a //$tag
+                        '''
+                    }
 
                 }
             }
