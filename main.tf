@@ -46,5 +46,8 @@ resource "aws_s3_bucket_object" "object" {
   key    = "index.html"
   acl    = "public-read"  # or can be "public-read"
   source = "index.html"
+  etag = filemd5("index.html")
+  content_type = “text/html”
 
-}             
+}
+      
