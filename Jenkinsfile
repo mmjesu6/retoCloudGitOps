@@ -44,7 +44,7 @@ pipeline {
         }   
         stage ('Terraform Apply') {
             when {
-                any {
+                anyOf {
                     expression { BRANCH_NAME.equals('main') }
                 }
             }
